@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   /* ==========================================
      2. SCROLL REVEAL ANIMATIONS
      ========================================== */
@@ -56,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     revealElements.forEach(element => observer.observe(element));
   }
-
 
   /* ==========================================
      3. ANIMATED TAGLINE
@@ -101,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
       taglineObserver.observe(tagline);
     }
   }
-
 
   /* ==========================================
      4. EXPLORE PAGE CATEGORY FILTERS
@@ -148,7 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-
   /* ==========================================
      5. DOWNLOAD FILE INFORMATION
      ========================================== */
@@ -164,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
       file: "downloads/Itachi-Study-Buddy-Setup-1.0.0.exe"
     }
   };
-
 
   /* ==========================================
      6. DOWNLOAD POPUP STYLING
@@ -363,7 +358,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.head.appendChild(modalStyles);
 
-
   /* ==========================================
      7. CREATE DOWNLOAD POPUP
      ========================================== */
@@ -398,17 +392,13 @@ document.addEventListener("DOMContentLoaded", () => {
       </p>
 
       <div class="download-security">
-
-        <strong>
-          ⚠ Security Notice
-        </strong>
+        <strong>⚠ Security Notice</strong>
 
         <p>
           This application is currently unsigned.
           Your browser or Windows SmartScreen may display
           a security warning during download or installation.
         </p>
-
       </div>
 
       <p
@@ -435,18 +425,14 @@ document.addEventListener("DOMContentLoaded", () => {
         </button>
 
       </div>
-
     </div>
   `;
 
   document.body.appendChild(overlay);
 
-
   /* ==========================================
      8. POPUP ELEMENTS AND STATE
      ========================================== */
-
-  const modal = overlay.querySelector(".download-modal");
 
   const modalTitle = overlay.querySelector(
     "#download-modal-title"
@@ -469,7 +455,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let previousBodyOverflow = "";
   let checking = false;
 
-
   /* ==========================================
      9. OPEN AND CLOSE POPUP
      ========================================== */
@@ -489,7 +474,6 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmButton.textContent = "Download for Windows ↓";
 
     overlay.hidden = false;
-
     document.body.style.overflow = "hidden";
 
     confirmButton.focus();
@@ -499,9 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (checking) return;
 
     overlay.hidden = true;
-
     document.body.style.overflow = previousBodyOverflow;
-
     selectedDownload = null;
 
     if (
@@ -511,7 +493,6 @@ document.addEventListener("DOMContentLoaded", () => {
       previousFocus.focus();
     }
   }
-
 
   /* ==========================================
      10. CONNECT WEBSITE DOWNLOAD BUTTONS
@@ -527,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!file) return;
 
-    const normalizedFile = file.replace(/^\.?\//, "");
+    const normalizedFile = file.replace(/^\.\/?/, "");
 
     const download = Object.values(downloads).find(item => {
       return normalizedFile === item.file;
@@ -537,11 +518,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     link.addEventListener("click", event => {
       event.preventDefault();
-
       openDownloadModal(download);
     });
   });
-
 
   /* ==========================================
      11. CANCEL DOWNLOAD
@@ -550,7 +529,6 @@ document.addEventListener("DOMContentLoaded", () => {
   cancelButton.addEventListener("click", () => {
     closeDownloadModal();
   });
-
 
   /* ==========================================
      12. CONFIRM AND START DOWNLOAD
@@ -561,52 +539,80 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!selectedDownload || checking) return;
 
     const file = selectedDownload.file;
+    const filename = file.split("/").pop();
 
-    // Downloads should be tested through a local server.
+    const allowedFiles = Object.values(downloads).map(
+      item => item.file.split("/").pop()
+    );
+
+    if (!allowedFiles.includes(filename)) {
+      statusMessage.textContent =
+        "Unknown installer selected.";
+
+      statusMessage.hidden = false;
+      return;
+    }
+
     if (window.location.protocol === "file:") {
       statusMessage.textContent =
-        "Please open this website using a local server " +
-        "to test installer downloads.";
+        "Please run the website using a local server " +
+        "(py -m http.server 8000) to test downloads.";
 
       statusMessage.hidden = false;
       return;
     }
 
     checking = true;
-
     confirmButton.disabled = true;
-    confirmButton.textContent = "Checking installer...";
-
+    confirmButton.textContent = "Starting download...";
     statusMessage.hidden = true;
 
     try {
-      const response = await fetch(file, {
-        method: "HEAD",
-        cache: "no-store"
-      });
 
-      if (!response.ok) {
-        throw new Error("Installer not found");
+      const isLocal = [
+        "localhost",
+        "127.0.0.1",
+        "[::1]"
+      ].includes(window.location.hostname);
+
+      if (isLocal) {
+
+        // Download from the local downloads folder.
+        const response = await fetch(file, {
+          method: "HEAD",
+          cache: "no-store"
+        });
+
+        const contentType =
+          response.headers.get("content-type") || "";
+
+        if (
+          !response.ok ||
+          contentType.includes("text/html")
+        ) {
+          throw new Error("Local installer not found");
+        }
+
+        const downloadLink = document.createElement("a");
+
+        downloadLink.href = file;
+        downloadLink.download = filename;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+
+      } else {
+
+        // Download from the published GitHub Release.
+        const releaseBase =
+          "https://github.com/praishwarya10/desktop-buddies/releases/download/v1.0.0/";
+
+        const downloadUrl =
+          releaseBase + encodeURIComponent(filename);
+
+        window.location.assign(downloadUrl);
       }
-
-      const contentType =
-        response.headers.get("content-type") || "";
-
-      if (contentType.includes("text/html")) {
-        throw new Error("Installer URL returned HTML");
-      }
-
-      // Start the actual EXE download.
-      const downloadLink = document.createElement("a");
-
-      downloadLink.href = file;
-      downloadLink.download = file.split("/").pop();
-
-      document.body.appendChild(downloadLink);
-
-      downloadLink.click();
-
-      downloadLink.remove();
 
       checking = false;
       closeDownloadModal();
@@ -614,22 +620,20 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
 
       statusMessage.textContent =
-        "The installer could not be found or verified. " +
-        "Please check that the EXE file is inside " +
-        "the downloads folder.";
+        "The installer could not be found. " +
+        "For local testing, check the downloads folder. " +
+        "For the live website, make sure the GitHub Release is published.";
 
       statusMessage.hidden = false;
 
     } finally {
 
       checking = false;
-
       confirmButton.disabled = false;
       confirmButton.textContent = "Download for Windows ↓";
 
     }
   });
-
 
   /* ==========================================
      13. CLOSE POPUP ON OUTSIDE CLICK
@@ -640,7 +644,6 @@ document.addEventListener("DOMContentLoaded", () => {
       closeDownloadModal();
     }
   });
-
 
   /* ==========================================
      14. KEYBOARD ACCESSIBILITY
