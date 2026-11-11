@@ -1,0 +1,4 @@
+
+# Prefer JavaScript as the repository's primary language
+*.html linguist-detectable=false
+*.css linguist-detectable=false
