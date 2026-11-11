@@ -15,7 +15,7 @@ const path = require('path');
 
 // true  = testing (5 sec / 30 sec)
 // false = actual (5 min / 30 min)
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 const FIVE_MIN = TEST_MODE ? 5000 : 5 * 60 * 1000;
 const THIRTY_MIN = TEST_MODE ? 30000 : 30 * 60 * 1000;
