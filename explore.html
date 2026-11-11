@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#DDE3E8">
+
+  <title>Explore | Desktop Buddies</title>
+  <meta name="description" content="Find your perfect desktop companion. Explore playful buddies and study companions for Windows.">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* EXPLORE PAGE ONLY */
+
+    .explore-page {
+      background: #DDE3E8;
+      min-height: 100vh;
+    }
+
+    .explore-heading {
+      padding: 165px 0 45px;
+    }
+
+    .explore-heading .h1 {
+      max-width: 850px;
+    }
+
+    .explore-heading .lead {
+      max-width: 650px;
+    }
+
+    .explore-content {
+      padding: 0 0 110px;
+    }
+
+    /* CATEGORY FILTERS */
+
+    .explore-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 12px 0 34px;
+    }
+
+    .explore-filter {
+      padding: 11px 22px;
+      border: 1px solid rgba(58,15,52,.28);
+      border-radius: 100px;
+      background: transparent;
+      color: #3A0F34;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .25s, color .25s;
+    }
+
+    .explore-filter:hover,
+    .explore-filter.active {
+      background: #3A0F34;
+      color: #FFFFFF;
+    }
+
+    /* TWO-COLUMN CHARACTER GALLERY */
+
+    .explore-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .explore-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(58,15,52,.16);
+      border-radius: 22px;
+      background: #EDF0F3;
+      transition:
+        transform .4s cubic-bezier(.22,1,.36,1),
+        border-color .3s;
+    }
+
+    .explore-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(58,15,52,.45);
+    }
+
+    .explore-card[hidden] {
+      display: none !important;
+    }
+
+    /* CHARACTER IMAGE BOX */
+
+    .explore-art {
+      width: 100%;
+      height: 470px;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #D0D7DE;
+    }
+
+    .explore-card:nth-child(2) .explore-art {
+      background: #C9D1DA;
+    }
+
+    .explore-art img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      object-position: center center;
+      flex-shrink: 1;
+      filter: none;
+      transform: none;
+      transition: transform .45s cubic-bezier(.22,1,.36,1);
+    }
+
+    .explore-card:hover .explore-art img {
+      transform: scale(1.025);
+    }
+
+    /* CARD CONTENT */
+
+    .explore-card-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 30px 32px 32px;
+    }
+
+    .explore-card-content .eyebrow {
+      display: block;
+      color: #936300;
+      font-size: 12px;
+      letter-spacing: .13em;
+    }
+
+    .explore-card-content h2 {
+      margin: 14px 0 12px;
+      color: #3A0F34;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(27px, 3vw, 36px);
+      font-weight: 700;
+      letter-spacing: -.055em;
+      line-height: 1.15;
+    }
+
+    .explore-card-content p {
+      margin: 0;
+      color: #6D5D70;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .explore-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: auto;
+      padding-top: 28px;
+    }
+
+    .explore-card-bottom a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 19px;
+      border: 1px solid rgba(58,15,52,.25);
+      border-radius: 100px;
+      color: #3A0F34;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .25s, color .25s;
+    }
+
+    .explore-card-bottom a:hover {
+      background: #3A0F34;
+      color: #FFFFFF;
+    }
+
+    .explore-card-bottom .arrow-icon {
+      color: #3A0F34;
+      font-size: 27px;
+    }
+
+    /* EMPTY CATEGORY */
+
+    .explore-empty {
+      padding: 65px 30px;
+      border: 1px solid rgba(58,15,52,.16);
+      border-radius: 20px;
+      background: #EDF0F3;
+      text-align: center;
+    }
+
+    .explore-empty[hidden] {
+      display: none !important;
+    }
+
+    .explore-empty h2 {
+      margin: 12px 0;
+      color: #3A0F34;
+      font-size: 30px;
+    }
+
+    .explore-empty p {
+      color: #6D5D70;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 760px) {
+      .explore-heading {
+        padding: 140px 0 38px;
+      }
+
+      .explore-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+
+      .explore-art {
+        height: 420px;
+        padding: 26px;
+      }
+
+      .explore-card-content {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .explore-art {
+        height: 330px;
+        padding: 18px;
+      }
+
+      .explore-card-content h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body class="explore-page">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- NAVIGATION -->
+
+<div class="nav-wrap">
+  <nav class="nav" aria-label="Main navigation">
+
+    <a class="wordmark" href="index.html">
+      desktop buddies<span>.</span>
+    </a>
+
+    <button
+      class="menu"
+      type="button"
+      aria-label="Toggle navigation"
+      aria-expanded="false">
+      Menu ☰
+    </button>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="explore.html" aria-current="page">Explore</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <a class="nav-cta" href="explore.html">
+      Explore collection ↗
+    </a>
+
+  </nav>
+</div>
+
+<main id="main">
+
+  <!-- PAGE INTRO -->
+
+  <section class="explore-heading">
+    <div class="container">
+
+      <span class="eyebrow">
+        THE CHARACTER COLLECTION
+      </span>
+
+      <h1 class="h1">
+        Every screen deserves a little personality.
+      </h1>
+
+      <p class="lead">
+        Some bring a smile. Others keep you focused.
+        Find the companion that makes your desktop feel like yours.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- CHARACTER COLLECTION -->
+
+  <section class="explore-content">
+    <div class="container">
+
+      <div class="explore-filters" aria-label="Buddy categories">
+
+        <button
+          class="explore-filter active"
+          type="button"
+          data-filter="all"
+          aria-pressed="true">
+          All buddies
+        </button>
+
+        <button
+          class="explore-filter"
+          type="button"
+          data-filter="study"
+          aria-pressed="false">
+          Study buddies
+        </button>
+
+        <button
+          class="explore-filter"
+          type="button"
+          data-filter="just"
+          aria-pressed="false">
+          Just buddies
+        </button>
+
+        <button
+          class="explore-filter"
+          type="button"
+          data-filter="hydra"
+          aria-pressed="false">
+          Hydra buddies
+        </button>
+
+      </div>
+
+      <div class="explore-grid">
+
+        <!-- SPIDER-MAN -->
+
+        <article class="explore-card" data-category="just">
+
+          <div class="explore-art">
+            <img
+              src="assets/spiderman.png"
+              alt="Spider-Man in a web-shooting pose"
+              loading="lazy">
+          </div>
+
+          <div class="explore-card-content">
+
+            <span class="eyebrow">
+              JUST BUDDIES · WINDOWS
+            </span>
+
+            <h2>Spider-Man</h2>
+
+            <p>
+              A playful companion who hangs out on your desktop
+              and follows your cursor.
+            </p>
+
+            <div class="explore-card-bottom">
+
+              <a href="spiderman.html">
+                Meet Spider-Man
+              </a>
+
+              <span class="arrow-icon" aria-hidden="true">↗</span>
+
+            </div>
+
+          </div>
+
+        </article>
+
+        <!-- ITACHI -->
+
+        <article class="explore-card" data-category="study">
+
+          <div class="explore-art">
+            <img
+              src="assets/itachi.png"
+              alt="Itachi Uchiha in his Akatsuki cloak"
+              loading="lazy">
+          </div>
+
+          <div class="explore-card-content">
+
+            <span class="eyebrow">
+              STUDY BUDDIES · WINDOWS
+            </span>
+
+            <h2>Itachi Uchiha</h2>
+
+            <p>
+              A calm study companion with timed focus check-ins,
+              breaks, and encouragement.
+            </p>
+
+            <div class="explore-card-bottom">
+
+              <a href="itachi.html">
+                Meet Itachi
+              </a>
+
+              <span class="arrow-icon" aria-hidden="true">↗</span>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      </div>
+
+      <!-- HYDRA CATEGORY PLACEHOLDER -->
+
+      <div class="explore-empty" id="hydra-empty" hidden>
+
+        <span class="eyebrow">
+          HYDRA BUDDIES
+        </span>
+
+        <h2>A little reminder to recharge.</h2>
+
+        <p>
+          A hydration companion is in the works.
+          Check back to meet your next desktop buddy.
+        </p>
+
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+  <div class="container footer-inner">
+
+    <a class="wordmark" href="index.html">
+      desktop buddies<span>.</span>
+    </a>
+
+    <div class="footer-links">
+      <a href="explore.html">Explore</a>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+
+    <span class="small">
+      Made for curious desktops.
+    </span>
+
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+
+<script>
+  const filterButtons = document.querySelectorAll(".explore-filter");
+  const buddyCards = document.querySelectorAll(".explore-card");
+  const hydraEmpty = document.getElementById("hydra-empty");
+
+  filterButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const selectedCategory = button.dataset.filter;
+
+      filterButtons.forEach(filter => {
+        const isActive = filter === button;
+
+        filter.classList.toggle("active", isActive);
+        filter.setAttribute("aria-pressed", String(isActive));
+      });
+
+      buddyCards.forEach(card => {
+        const matches =
+          selectedCategory === "all" ||
+          card.dataset.category === selectedCategory;
+
+        card.hidden = !matches;
+      });
+
+      hydraEmpty.hidden = selectedCategory !== "hydra";
+
+    });
+
+  });
+</script>
+
+</body>
+</html>

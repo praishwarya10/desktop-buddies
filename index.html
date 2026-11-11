@@ -1,0 +1,1217 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Desktop Buddies | Your Desktop. Your Universe.</title>
+  <meta name="description"
+        content="Give your desktop a little personality. Meet Desktop Buddies, your playful Windows companions and study partners.">
+  <meta name="theme-color" content="#DDE3E8">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+  <style>
+    :root {
+      --mist: #DDE3E8;
+      --plum: #3A0F34;
+      --gold: #EAAA00;
+      --muted: #756778;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--mist);
+      color: var(--plum);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    button, a {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    .character:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 5px;
+    }
+
+    .skip {
+      position: absolute;
+      top: -100px;
+      left: 12px;
+      z-index: 100;
+      background: white;
+      padding: 12px;
+    }
+
+    .skip:focus {
+      top: 12px;
+    }
+
+    /* HEADER */
+
+    .top {
+      position: relative;
+      z-index: 20;
+      height: 78px;
+      padding: 0 clamp(20px, 3.3vw, 58px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brandline {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.07em;
+    }
+
+    .brand span {
+      color: var(--gold);
+    }
+
+    .header-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .16em;
+    }
+
+    .header-label::before {
+      content: "";
+      display: inline-block;
+      width: 35px;
+      height: 1px;
+      margin-right: 15px;
+      vertical-align: middle;
+      background: var(--plum);
+      opacity: .5;
+    }
+
+    .nav {
+      display: flex;
+      gap: 35px;
+    }
+
+    .nav a {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: color .25s;
+    }
+
+    .nav a:hover {
+      color: #A06C00;
+    }
+
+    /* HERO */
+
+    .hero {
+      position: relative;
+      height: 790px;
+      min-height: calc(100svh - 78px);
+      max-height: 960px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* LARGE BACKGROUND TYPOGRAPHY */
+
+    .giant {
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      white-space: nowrap;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: clamp(90px, 14vw, 240px);
+      line-height: .8;
+      letter-spacing: -.105em;
+      color: rgba(58, 15, 52, .09);
+    }
+
+    .giant.left {
+      top: 16%;
+      left: -2vw;
+    }
+
+    .giant.right {
+      top: 43%;
+      right: -2vw;
+    }
+
+    /* HERO HEADING */
+
+    .heading {
+      position: absolute;
+      z-index: 3;
+      top: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 94%;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .heading .over {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .26em;
+      color: #926100;
+    }
+
+    .heading h1 {
+      margin: 12px 0 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(30px, 3.3vw, 51px);
+      font-weight: 700;
+      letter-spacing: -.065em;
+    }
+
+    .heading p {
+      margin: 10px 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* LIGHTING */
+
+    .spotlight {
+      position: absolute;
+      z-index: -1;
+      left: 50%;
+      top: 6%;
+      transform: translateX(-50%);
+      width: min(70vw, 850px);
+      height: 75%;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse at 50% 45%,
+        rgba(255,255,255,.95),
+        rgba(255,255,255,.45) 36%,
+        rgba(234,170,0,.07) 60%,
+        transparent 78%
+      );
+    }
+
+    /* CHARACTER STAGE */
+
+    .stage {
+      position: absolute;
+      inset: 110px 0 180px;
+      perspective: 1400px;
+      perspective-origin: 50% 45%;
+      touch-action: pan-y;
+      cursor: grab;
+    }
+
+    .stage.dragging {
+      cursor: grabbing;
+    }
+
+    .floor {
+      position: absolute;
+      left: 50%;
+      top: 76%;
+      transform: translateX(-50%);
+      width: min(85vw, 1100px);
+      height: 120px;
+      background: radial-gradient(
+        ellipse,
+        rgba(58,15,52,.30),
+        rgba(58,15,52,.10) 50%,
+        transparent 75%
+      );
+      filter: blur(22px);
+      pointer-events: none;
+    }
+
+    .character {
+      position: absolute;
+      left: 50%;
+      top: 47%;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      will-change: transform;
+      user-select: none;
+      outline: none;
+    }
+
+    .figure {
+      position: absolute;
+      left: -112px;
+      top: -230px;
+      width: 224px;
+      height: 460px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .figure::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      bottom: 5px;
+      left: 12%;
+      width: 76%;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(58,15,52,.35);
+      filter: blur(15px);
+    }
+
+    .figure img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      -webkit-user-drag: none;
+      filter:
+        drop-shadow(18px 24px 17px rgba(58,15,52,.30))
+        drop-shadow(-5px -4px 12px rgba(255,255,255,.55));
+    }
+
+    .figure .silhouette {
+      width: 195px;
+      height: 385px;
+      opacity: .97;
+      filter:
+        drop-shadow(12px 20px 13px rgba(30,15,35,.38));
+    }
+
+    .character.active .figure img {
+      filter:
+        drop-shadow(23px 30px 20px rgba(58,15,52,.38))
+        drop-shadow(-7px -5px 15px rgba(255,255,255,.6));
+    }
+
+    .character:not(.active) {
+      filter: saturate(.7);
+    }
+
+    .character[data-type="available"] {
+      cursor: pointer;
+    }
+
+    .character[data-type="future"] {
+      cursor: default;
+    }
+
+    /* CHARACTER CAPTION */
+
+    .caption-area {
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      bottom: 72px;
+      transform: translateX(-50%);
+      text-align: center;
+      min-width: min(95vw, 560px);
+    }
+
+    .count {
+      color: #916000;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .23em;
+      text-transform: uppercase;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin: 10px auto 0;
+    }
+
+    .arrow {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      border: 1px solid rgba(58,15,52,.55);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--plum);
+      font-size: 22px;
+      transition:
+        background .25s,
+        color .25s,
+        transform .25s;
+    }
+
+    .arrow:hover {
+      background: var(--plum);
+      color: white;
+      transform: scale(1.07);
+    }
+
+    #characterName {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 700;
+      letter-spacing: -.075em;
+      line-height: 1.1;
+    }
+
+    #characterMeta {
+      margin: 14px 0 19px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .17em;
+      color: var(--muted);
+    }
+
+    .explore-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      padding: 14px 20px;
+      border: 1px solid var(--plum);
+      background: var(--plum);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition:
+        background .3s,
+        color .3s,
+        border-color .3s;
+    }
+
+    .explore-btn:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--plum);
+    }
+
+    .explore-btn[aria-disabled="true"] {
+      background: #AAA5B0;
+      border-color: #AAA5B0;
+      color: var(--plum);
+      pointer-events: none;
+    }
+
+    /* BOTTOM CONTROLS */
+
+    .bottomline {
+      position: absolute;
+      bottom: 24px;
+      left: clamp(20px,3.3vw,58px);
+      right: clamp(20px,3.3vw,58px);
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      color: #69576B;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #AAA5B0;
+      transition: background .3s, transform .3s;
+    }
+
+    .dot.current {
+      background: var(--gold);
+      transform: scale(1.5);
+    }
+
+    /* EDITORIAL SECTION */
+
+    .more {
+      padding: 105px clamp(24px,7vw,120px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 60px;
+      background: var(--plum);
+      color: var(--mist);
+    }
+
+    .more .count {
+      color: var(--gold);
+    }
+
+    .more h2 {
+      margin: 18px 0 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(40px,6vw,85px);
+      line-height: 1;
+      letter-spacing: -.075em;
+      color: white;
+    }
+
+    .more p {
+      max-width: 460px;
+      color: #D8CCD7;
+      line-height: 1.8;
+    }
+
+    .more a {
+      display: inline-block;
+      margin-top: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .more a:hover {
+      color: white;
+    }
+
+    /* FOOTER */
+
+    .footer {
+      padding: 26px clamp(24px,7vw,120px);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--plum);
+      border-top: 1px solid rgba(255,255,255,.15);
+      color: #C6B9C5;
+      font-size: 11px;
+    }
+
+    .footer a {
+      color: #F0E9EF;
+    }
+
+    .footer a:hover {
+      color: var(--gold);
+    }
+
+    .mobilehint {
+      display: none;
+    }
+
+    @media (max-width: 720px) {
+      .top {
+        height: 65px;
+      }
+
+      .header-label {
+        display: none;
+      }
+
+      .nav {
+        gap: 18px;
+      }
+
+      .nav a {
+        font-size: 10px;
+      }
+
+      .hero {
+        height: 760px;
+        min-height: calc(100svh - 65px);
+        max-height: 850px;
+      }
+
+      .heading {
+        top: 22px;
+      }
+
+      .heading h1 {
+        font-size: 29px;
+      }
+
+      .heading p {
+        font-size: 12px;
+      }
+
+      .giant {
+        font-size: 20vw;
+      }
+
+      .giant.left {
+        top: 21%;
+      }
+
+      .giant.right {
+        top: 48%;
+      }
+
+      .stage {
+        inset: 120px 0 195px;
+      }
+
+      .figure {
+        left: -85px;
+        top: -185px;
+        width: 170px;
+        height: 370px;
+      }
+
+      .figure .silhouette {
+        width: 145px;
+        height: 300px;
+      }
+
+      .caption-area {
+        bottom: 76px;
+        min-width: 94vw;
+      }
+
+      .title-row {
+        gap: 5px;
+      }
+
+      #characterName {
+        font-size: 33px;
+      }
+
+      .arrow {
+        width: 39px;
+        height: 39px;
+      }
+
+      .bottomline {
+        bottom: 20px;
+        font-size: 9px;
+      }
+
+      .bottomline > span:last-child {
+        display: none;
+      }
+
+      .mobilehint {
+        display: block;
+      }
+
+      .more {
+        grid-template-columns: 1fr;
+        padding: 75px 24px;
+        gap: 25px;
+      }
+
+      .footer {
+        padding: 24px;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="brandline">
+    <a class="brand" href="index.html">
+      desktop buddies<span>.</span>
+    </a>
+
+    <span class="header-label">
+      THE CHARACTER COLLECTION
+    </span>
+  </div>
+
+  <nav class="nav" aria-label="Main navigation">
+    <a href="index.html" aria-current="page">Home</a>
+    <a href="explore.html">Explore</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero" aria-label="Explore desktop companions">
+
+    <div class="giant left" aria-hidden="true">
+      YOUR DESKTOP.
+    </div>
+
+    <div class="giant right" aria-hidden="true">
+      YOUR UNIVERSE.
+    </div>
+
+    <div class="spotlight" aria-hidden="true"></div>
+
+    <div class="heading">
+      <span class="over">YOUR DESKTOP, REIMAGINED</span>
+
+      <h1>A little company. A lot of character.</h1>
+
+      <p>Find the personality that belongs on your screen.</p>
+    </div>
+
+    <div class="stage" id="stage"
+         aria-label="Drag or swipe to browse characters">
+      <div class="floor" aria-hidden="true"></div>
+    </div>
+
+    <div class="caption-area" aria-live="polite">
+
+      <div class="count" id="count">
+        MEET YOUR BUDDY
+      </div>
+
+      <div class="title-row">
+
+        <button class="arrow" id="prev"
+                aria-label="Previous character">
+          ←
+        </button>
+
+        <h2 id="characterName">Spider-Man</h2>
+
+        <button class="arrow" id="next"
+                aria-label="Next character">
+          →
+        </button>
+
+      </div>
+
+      <div id="characterMeta">JUST BUDDIES</div>
+
+      <a class="explore-btn" id="characterLink"
+         href="spiderman.html">
+        MEET SPIDER-MAN <span aria-hidden="true">↗</span>
+      </a>
+
+    </div>
+
+    <div class="bottomline">
+
+      <span>Drag to explore / use arrow keys</span>
+
+      <div class="progress" id="progress"
+           aria-label="Carousel position"></div>
+
+      <span class="mobilehint">Swipe to explore</span>
+
+      <span>Windows / Desktop companions</span>
+
+    </div>
+
+  </section>
+
+  <section class="more">
+
+    <div>
+      <span class="count">MORE THAN A WALLPAPER</span>
+
+      <h2>
+        Make your screen<br>
+        feel alive.
+      </h2>
+    </div>
+
+    <div>
+      <p>
+        A familiar face. A little motivation. A companion
+        that makes your everyday desktop feel a little
+        more personal.
+      </p>
+
+      <p>
+        From playful company to focused study sessions,
+        find a buddy that fits your world.
+      </p>
+
+      <a href="explore.html">
+        DISCOVER THE COLLECTION ↗
+      </a>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>© Desktop Buddies</span>
+
+  <div>
+    <a href="privacy.html">Privacy</a>
+    &nbsp; / &nbsp;
+    <a href="terms.html">Terms</a>
+    &nbsp; / &nbsp;
+    <a href="about.html">About</a>
+  </div>
+</footer>
+
+<script>
+(() => {
+
+  const svgSilhouette = `
+    <svg class="silhouette"
+         viewBox="0 0 240 440"
+         xmlns="http://www.w3.org/2000/svg"
+         aria-hidden="true">
+
+      <defs>
+        <linearGradient id="figureMaterial"
+                        x1="0" y1="0" x2="1" y2=".35">
+          <stop offset="0" stop-color="#181820"/>
+          <stop offset=".18" stop-color="#777782"/>
+          <stop offset=".40" stop-color="#55555F"/>
+          <stop offset=".72" stop-color="#292932"/>
+          <stop offset="1" stop-color="#101016"/>
+        </linearGradient>
+
+        <linearGradient id="figureLight"
+                        x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0"
+                stop-color="#FFFFFF"
+                stop-opacity=".75"/>
+          <stop offset=".38"
+                stop-color="#FFFFFF"
+                stop-opacity=".10"/>
+          <stop offset="1"
+                stop-color="#000000"
+                stop-opacity=".55"/>
+        </linearGradient>
+
+        <radialGradient id="figureHead"
+                        cx=".25" cy=".15" r=".9">
+          <stop offset="0" stop-color="#9999A3"/>
+          <stop offset=".40" stop-color="#575762"/>
+          <stop offset="1" stop-color="#191921"/>
+        </radialGradient>
+
+        <filter id="figureShadow"
+                x="-40%" y="-20%"
+                width="180%" height="160%">
+          <feGaussianBlur stdDeviation="7"/>
+        </filter>
+      </defs>
+
+      <ellipse cx="126" cy="421"
+               rx="82" ry="13"
+               fill="#24152A"
+               opacity=".28"
+               filter="url(#figureShadow)"/>
+
+      <path d="M87 68
+               C87 34 101 18 123 18
+               C147 18 159 37 159 68
+               C159 98 144 117 123 117
+               C102 117 87 97 87 68Z"
+            fill="url(#figureHead)"/>
+
+      <path d="M108 104 L108 133
+               L139 133 L139 104Z"
+            fill="#44444F"/>
+
+      <path d="M105 121
+               C80 121 60 135 52 156
+               L38 224 L56 243
+               L77 190 L79 275
+               L168 275 L169 190
+               L190 243 L207 225
+               L194 157
+               C186 135 165 122 140 121
+               L124 143Z"
+            fill="url(#figureMaterial)"/>
+
+      <path d="M83 142
+               Q121 159 162 142
+               L155 245
+               Q121 263 90 245Z"
+            fill="url(#figureLight)"
+            opacity=".36"/>
+
+      <path d="M52 157
+               Q43 178 36 213
+               L22 291
+               Q19 312 35 316
+               Q49 318 54 297
+               L77 196Z"
+            fill="url(#figureMaterial)"/>
+
+      <path d="M194 157
+               Q203 178 211 213
+               L226 291
+               Q229 312 213 316
+               Q199 318 194 297
+               L169 196Z"
+            fill="url(#figureMaterial)"/>
+
+      <path d="M79 264 L119 267
+               L113 399
+               Q112 414 98 415
+               L76 415
+               Q69 411 71 398Z"
+            fill="url(#figureMaterial)"/>
+
+      <path d="M125 267 L168 264
+               L177 398
+               Q180 411 169 415
+               L146 415
+               Q132 413 132 399Z"
+            fill="url(#figureMaterial)"/>
+
+      <path d="M89 65
+               Q89 29 112 23
+               M54 159 Q46 179 39 220
+               M80 280 L73 397"
+            fill="none"
+            stroke="#EAAA00"
+            stroke-width="2"
+            opacity=".38"/>
+
+      <path d="M155 50
+               Q164 78 148 101
+               M192 158
+               Q204 188 212 228
+               M168 280 L176 399"
+            fill="none"
+            stroke="#DDE3E8"
+            stroke-width="2"
+            opacity=".5"/>
+
+    </svg>
+  `;
+
+  const items = [
+    {
+      name: "Spider-Man",
+      meta: "JUST BUDDIES",
+      url: "spiderman.html",
+      image: "assets/spiderman.png",
+      type: "available"
+    },
+    {
+      name: "Itachi Uchiha",
+      meta: "STUDY BUDDIES",
+      url: "itachi.html",
+      image: "assets/itachi.png",
+      type: "available"
+    },
+    ...Array.from({ length: 6 }, (_, i) => ({
+      name: "Mystery Buddy",
+      meta: "A NEW PERSONALITY AWAITS",
+      url: "#",
+      type: "future",
+      id: i
+    }))
+  ];
+
+  const stage = document.getElementById("stage");
+  const nameEl = document.getElementById("characterName");
+  const metaEl = document.getElementById("characterMeta");
+  const link = document.getElementById("characterLink");
+  const count = document.getElementById("count");
+  const progress = document.getElementById("progress");
+
+  let target = 0;
+  let current = 0;
+  let dragX = null;
+  let dragged = false;
+  let suppressClick = false;
+
+  const cards = items.map((item, i) => {
+    const el = document.createElement("div");
+
+    el.className = "character";
+    el.dataset.type = item.type;
+    el.tabIndex = item.type === "available" ? 0 : -1;
+
+    el.setAttribute(
+      "role",
+      item.type === "available" ? "link" : "img"
+    );
+
+    el.setAttribute(
+      "aria-label",
+      item.type === "available"
+        ? `Select ${item.name}`
+        : "Mystery character silhouette"
+    );
+
+    el.innerHTML = `
+      <div class="figure">
+        ${
+          item.image
+            ? `<img src="${item.image}"
+                    alt=""
+                    draggable="false">`
+            : svgSilhouette
+        }
+      </div>
+    `;
+
+    stage.appendChild(el);
+
+    el.addEventListener("click", () => {
+      if (suppressClick || dragged) return;
+
+      const selected = ((Math.round(target) % items.length)
+        + items.length) % items.length;
+
+      if (selected === i && item.type === "available") {
+        window.location.href = item.url;
+      } else {
+        go(i);
+      }
+    });
+
+    el.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+
+      e.preventDefault();
+
+      const selected = ((Math.round(target) % items.length)
+        + items.length) % items.length;
+
+      if (selected === i && item.type === "available") {
+        window.location.href = item.url;
+      } else {
+        go(i);
+      }
+    });
+
+    return el;
+  });
+
+  items.forEach(() => {
+    const dot = document.createElement("span");
+    dot.className = "dot";
+    progress.appendChild(dot);
+  });
+
+  function distance(i, position) {
+    const n = items.length;
+    const d = i - position;
+
+    return ((d + n / 2) % n + n) % n - n / 2;
+  }
+
+  function go(i) {
+    const diff = distance(i, target);
+
+    target += diff;
+    updateCaption();
+  }
+
+  function updateCaption() {
+    const idx =
+      ((Math.round(target) % items.length) + items.length)
+      % items.length;
+
+    const item = items[idx];
+
+    nameEl.textContent = item.name;
+    metaEl.textContent = item.meta;
+    count.textContent = "MEET YOUR BUDDY";
+
+    link.href = item.type === "available" ? item.url : "#";
+
+    link.setAttribute(
+      "aria-disabled",
+      item.type === "future" ? "true" : "false"
+    );
+
+    link.innerHTML =
+      item.type === "future"
+        ? "STAY TUNED"
+        : `MEET ${item.name.toUpperCase()}
+           <span aria-hidden="true">↗</span>`;
+
+    [...progress.children].forEach((dot, i) => {
+      dot.classList.toggle("current", i === idx);
+    });
+  }
+
+  function animate() {
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    current += (target - current) *
+      (reducedMotion ? 1 : .095);
+
+    const mobile = window.innerWidth < 721;
+    const height = mobile ? 365 : 460;
+
+    cards.forEach((el, i) => {
+      const r = distance(i, current);
+      const a = Math.abs(r);
+
+      const scale =
+        1 / (1 + Math.pow(a * .36, 1.45));
+
+      const x =
+        Math.sign(r) *
+        (1 - Math.exp(-a * .62)) *
+        (mobile
+          ? window.innerWidth * .57
+          : Math.min(window.innerWidth * .55, 670));
+
+      const y =
+        (1 - scale) * height * .29 +
+        Math.pow(a, 1.15) * 8;
+
+      const z = -a * 155 + (a < .5 ? 95 : 0);
+
+      const rotation =
+        -Math.sign(r) * Math.min(a * 17, 50);
+
+      el.style.transform = `
+        translate3d(${x}px, ${y}px, ${z}px)
+        rotateY(${rotation}deg)
+        scale(${scale})
+      `;
+
+      el.style.opacity =
+        a > 4.1 ? 0 : Math.max(.28, 1 - a * .12);
+
+      el.style.zIndex =
+        String(Math.round(1000 - a * 100));
+
+      el.style.pointerEvents =
+        a > 3.5 ? "none" : "auto";
+
+      el.classList.toggle("active", a < .5);
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  function step(direction) {
+    const next =
+      ((Math.round(target) + direction) % items.length
+      + items.length) % items.length;
+
+    go(next);
+  }
+
+  document.getElementById("prev").addEventListener(
+    "click", () => step(-1)
+  );
+
+  document.getElementById("next").addEventListener(
+    "click", () => step(1)
+  );
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      step(-1);
+    }
+
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      step(1);
+    }
+  });
+
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0) return;
+
+    dragX = e.clientX;
+    dragged = false;
+
+    stage.classList.add("dragging");
+    stage.setPointerCapture(e.pointerId);
+  });
+
+  stage.addEventListener("pointermove", (e) => {
+    if (dragX === null) return;
+
+    if (Math.abs(e.clientX - dragX) > 8) {
+      dragged = true;
+    }
+  });
+
+  stage.addEventListener("pointerup", (e) => {
+    if (dragX === null) return;
+
+    const delta = e.clientX - dragX;
+
+    if (Math.abs(delta) > 35) {
+      step(delta < 0 ? 1 : -1);
+      suppressClick = true;
+
+      setTimeout(() => {
+        suppressClick = false;
+      }, 120);
+    }
+
+    dragX = null;
+    dragged = false;
+
+    stage.classList.remove("dragging");
+  });
+
+  stage.addEventListener("pointercancel", () => {
+    dragX = null;
+    dragged = false;
+    stage.classList.remove("dragging");
+  });
+
+  updateCaption();
+  animate();
+
+})();
+</script>
+
+</body>
+</html>

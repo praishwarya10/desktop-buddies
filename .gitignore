@@ -1,0 +1,17 @@
+
+# Windows installers
+downloads/*.exe
+
+# Dependencies and builds
+node_modules/
+dist/
+build/
+
+# Environment variables
+.env
+.env.*
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
