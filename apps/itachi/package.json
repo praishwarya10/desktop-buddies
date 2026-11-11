@@ -1,0 +1,38 @@
+
+{
+  "name": "itachi-study-buddy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Itachi desktop study companion with focus reminders",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.desktopbuddies.itachi",
+    "productName": "Itachi Study Buddy",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "itachi.html",
+      "itachi.png",
+      "package.json"
+    ],
+    "win": {
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Itachi-Study-Buddy-Setup-${version}.${ext}"
+    }
+  }
+}

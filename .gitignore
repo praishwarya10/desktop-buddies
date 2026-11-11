@@ -15,3 +15,18 @@ build/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Electron dependencies
+**/node_modules/
+
+# Electron build output
+**/dist/
+**/build/
+
+# Windows installers
+*.exe
+
+# Environment and local files
+.env
+.env.*
+*.log

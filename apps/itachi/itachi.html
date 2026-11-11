@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Itachi Study Buddy</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    overflow: hidden;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
+  #buddy {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transform: translateY(110%);
+    opacity: 0;
+
+    transition:
+      transform 2s cubic-bezier(0.45, 0, 0.55, 1),
+      opacity 2s ease;
+  }
+
+  #buddy.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .speech {
+    width: 315px;
+    padding: 16px;
+    margin-bottom: -12px;
+
+    background: rgba(19, 17, 27, 0.96);
+    color: white;
+    border: 1px solid #a72842;
+    border-radius: 17px;
+
+    text-align: center;
+    position: relative;
+    z-index: 2;
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .name {
+    color: #f46a7b;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  #message {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  #buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  button {
+    border: 0;
+    border-radius: 9px;
+    padding: 9px 13px;
+
+    background: #a72842;
+    color: white;
+    cursor: pointer;
+
+    font-size: 12px;
+    transition: background 0.2s ease;
+  }
+
+  button:hover {
+    background: #d73a55;
+  }
+
+  button.secondary {
+    background: #403b4b;
+  }
+
+  #itachi {
+    width: 300px;
+    height: 260px;
+    object-fit: contain;
+    object-position: bottom;
+    pointer-events: none;
+
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+  }
+
+  .hint {
+    margin-top: 9px;
+    font-size: 11px;
+    color: #aaa;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="buddy">
+  <div class="speech">
+    <div class="name">ITACHI UCHIHA</div>
+    <div id="message"></div>
+    <div id="buttons"></div>
+    <div class="hint" id="hint"></div>
+  </div>
+
+  <img id="itachi" src="./itachi.png" alt="Itachi">
+</div>
+
+<script>
+  const buddy = document.getElementById('buddy');
+  const message = document.getElementById('message');
+  const buttons = document.getElementById('buttons');
+  const hint = document.getElementById('hint');
+
+  const api = window.itachiBuddy;
+
+  function addButton(label, action, secondary = false) {
+    const button = document.createElement('button');
+
+    button.textContent = label;
+
+    if (secondary) {
+      button.classList.add('secondary');
+    }
+
+    button.addEventListener('click', () => {
+      api.action(action);
+    });
+
+    buttons.appendChild(button);
+  }
+
+  function render(data) {
+    const mode = typeof data === 'string'
+      ? data
+      : data.mode;
+
+    const dialogue = typeof data === 'string'
+      ? null
+      : data.dialogue;
+
+    buttons.innerHTML = '';
+    hint.textContent = '';
+
+    switch (mode) {
+
+      case 'idle':
+        message.textContent = 'Ready to train your mind?';
+        addButton('Start Studying', 'start');
+        addButton('Not now', 'hide', true);
+        break;
+
+      case 'greeting':
+        message.textContent = "Let's begin. Stay focused.";
+        hint.textContent = "I'll check on you soon.";
+        break;
+
+      case 'start-question':
+        message.textContent = 'Have you started studying?';
+        addButton('Yes, started!', 'yes-started');
+        addButton('Not yet', 'not-started', true);
+        hint.textContent = "I'll wait until you answer.";
+        break;
+
+      case 'not-started':
+        message.textContent =
+          "I'll wait. Let me know when you've started.";
+        addButton("I've started now", 'yes-started-later');
+        break;
+
+      case 'checkin':
+        message.textContent =
+          dialogue || 'Still focused, or caught in my genjutsu?';
+
+        addButton('Studying', 'studying');
+        addButton('Break', 'break', true);
+        addButton('End Session', 'end', true);
+        break;
+
+      case 'break':
+        message.textContent =
+          "Rest your mind. Return when you're ready.";
+
+        addButton('Resume', 'resume');
+        break;
+
+      case 'session':
+        message.textContent =
+          "Stay focused. I'll return.";
+
+        addButton('End Session', 'end', true);
+        break;
+    }
+
+    requestAnimationFrame(() => {
+      buddy.classList.add('visible');
+    });
+  }
+
+  api.onMode(render);
+
+  api.onHide(() => {
+    buddy.classList.remove('visible');
+  });
+</script>
+
+</body>
+</html>

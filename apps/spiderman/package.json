@@ -1,0 +1,39 @@
+
+{
+  "name": "spiderman-desktop-buddy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Spider-Man interactive desktop companion",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.desktopbuddies.spiderman",
+    "productName": "Spider-Man Desktop Buddy",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "settings.html",
+      "spiderman.png",
+      "package.json"
+    ],
+    "win": {
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "SpiderMan-Desktop-Buddy-Setup-${version}.${ext}"
+    }
+  }
+}
