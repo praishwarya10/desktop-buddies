@@ -6,6 +6,8 @@ Desktop Buddies is a collection of interactive Windows desktop companions that b
 
 The project features two Electron-based applications, **Spider-Man Desktop Buddy** and **Itachi Study Buddy**, alongside a responsive, multi-page website where users can explore features, watch demonstrations, and download the applications.
 
+**Built with:** JavaScript, Electron, HTML5, CSS3, and Node.js.
+
 ## Live Website
 
 **[Explore Desktop Buddies](https://praishwarya10.github.io/desktop-buddies/)**
@@ -16,7 +18,7 @@ Both applications are available to download through the website or GitHub Releas
 
 ## Meet the Buddies
 
-### 🕷️ Spider-Man Desktop Buddy
+### Spider-Man Desktop Buddy
 
 A playful, interactive desktop companion that hangs from the top of your screen and responds to cursor movements.
 
@@ -29,7 +31,7 @@ A playful, interactive desktop companion that hangs from the top of your screen 
 
 **[Download Spider-Man Desktop Buddy](https://github.com/praishwarya10/desktop-buddies/releases/download/v1.0.0/SpiderMan-Desktop-Buddy-Setup-1.0.0.exe)**
 
-### 🌙 Itachi Study Buddy
+### Itachi Study Buddy
 
 A desktop study companion designed to encourage focus, regular check-ins, and structured study sessions.
 
